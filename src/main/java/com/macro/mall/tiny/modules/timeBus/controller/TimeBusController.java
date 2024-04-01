@@ -1,14 +1,13 @@
 package com.macro.mall.tiny.modules.timeBus.controller;
 
 import com.macro.mall.tiny.common.api.CommonResult;
+import com.macro.mall.tiny.modules.timeBus.dto.BusRealTimeParam;
 import com.macro.mall.tiny.modules.timeBus.service.TimeBusService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -32,5 +31,14 @@ public class TimeBusController {
     @GetMapping(value = "/bus201")
     public CommonResult<String> timeBus201Sunhe() {
         return CommonResult.success(timeBusService.timeBus201Sunhe());
+    }
+
+    /**
+     * 获取实时数据通用接口
+     */
+    @ApiOperation(value = "实时数据通用接口", notes = "实时数据通用接口")
+    @PostMapping(value = "/busRealtime")
+    public CommonResult<String> busRealtime(@RequestBody BusRealTimeParam busRealTimeParam) {
+        return CommonResult.success(timeBusService.busRealtime(busRealTimeParam));
     }
 }

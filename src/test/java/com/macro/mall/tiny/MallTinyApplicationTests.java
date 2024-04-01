@@ -32,4 +32,17 @@ public class MallTinyApplicationTests {
 
     }
 
+    /**
+     * 实时公交api
+     */
+    @Test
+    public void testTimeBus() {
+        String timeUrl = "http://api.wxbus163.cn/z_busapi/BusApi.php?optype=city&uname=misteryliu@outlook.com";
+        log.info("请求路径:{}", timeUrl);
+        String result = HttpUtil.createGet(timeUrl).contentType("application/json").execute().body();
+        log.info("响应数据:{}", result);
+
+
+    }
+
 }
