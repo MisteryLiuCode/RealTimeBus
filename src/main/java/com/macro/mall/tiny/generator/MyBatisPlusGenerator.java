@@ -23,7 +23,7 @@ public class MyBatisPlusGenerator {
     public static void main(String[] args) {
         String projectPath = System.getProperty("user.dir");
         String moduleName = scanner("模块名");
-        String[] tableNames = scanner("表名，多个英文逗号分割").split(",");
+        String[] tableNames = scanner("表名").split(",");
         // 代码生成器
         AutoGenerator autoGenerator = new AutoGenerator(initDataSourceConfig());
         autoGenerator.global(initGlobalConfig(projectPath));
@@ -55,7 +55,7 @@ public class MyBatisPlusGenerator {
     private static GlobalConfig initGlobalConfig(String projectPath) {
         return new GlobalConfig.Builder()
                 .outputDir(projectPath + "/src/main/java")
-                .author("macro")
+                .author("misteryliu")
                 .disableOpenDir()
                 .enableSwagger()
                 .fileOverride()

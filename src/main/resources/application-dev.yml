@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:mysql://101.43.145.108:3306/around_map?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
-    username: around_map
+    url: jdbc:mysql://101.43.145.108:3306/real_time_bus?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: real_time_bus
     password: l198923.
   redis:
     host: 101.43.145.108 # Redis服务器地址

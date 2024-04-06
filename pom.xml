@@ -136,6 +136,11 @@
             <artifactId>commons-collections4</artifactId>
             <version>4.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.arrow</groupId>
+            <artifactId>arrow-vector</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>

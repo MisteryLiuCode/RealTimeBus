@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.macro.mall.tiny.modules.timeBus.mapper.TBusLineMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.macro.mall.tiny.modules.timeBus.model.TBusLine">
+        <id column="id" property="id" />
+        <result column="line_name" property="lineName" />
+        <result column="first_station_name" property="firstStationName" />
+        <result column="last_station_name" property="lastStationName" />
+        <result column="service_time" property="serviceTime" />
+        <result column="description" property="description" />
+        <result column="creatime" property="creatime" />
+        <result column="updatetime" property="updatetime" />
+    </resultMap>
+
+    <resultMap id="BusStationResultMap" type="com.macro.mall.tiny.modules.timeBus.dto.LineStationDTO">
+        <id column="id" property="id" />
+        <result column="line_name" property="lineName" />
+        <result column="first_station_name" property="firstStation" />
+        <result column="last_station_name" property="lastStation" />
+        <result column="service_time" property="serviceTime" />
+        <result column="description" property="description" />
+        <collection property="stations" ofType="com.macro.mall.tiny.modules.timeBus.dto.StationDTO">
+            <id column="station_id" property="id"/>
+            <result column="line_id" property="lineId" jdbcType="VARCHAR" />
+            <result column="stop_number" property="stopNumber" jdbcType="VARCHAR" />
+            <result column="stop_name" property="stopName" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+    
+    <select id="selectLineStation" resultMap="BusStationResultMap">
+
+        SELECT
+            l.id,
+            l.line_name,
+            l.service_time,
+            l.first_station_name,
+            l.last_station_name,
+            l.description,
+            s.id as station_id,
+            s.line_id,
+            s.stop_number,
+            s.stop_name
+        from t_bus_line l LEFT JOIN t_bus_stop s ON l.id = s.line_id
+        where 1=1
+<!--        <if test="id != null and id != ''">-->
+<!--            and l.id = #{id}-->
+<!--        </if> -->
+        order by s.stop_number
+    </select>
+
+
+
+</mapper>
