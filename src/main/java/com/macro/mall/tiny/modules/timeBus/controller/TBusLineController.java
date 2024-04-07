@@ -32,7 +32,14 @@ public class TBusLineController {
 
     @RequestMapping(value = "/getBusData")
     public CommonResult<String> getBusData() {
-        return CommonResult.success(busLineService.getBusData());
+        // 开始时间
+        long startTime = System.currentTimeMillis();
+        String res = busLineService.getBusData();
+        // 结束时间
+        long endTime = System.currentTimeMillis();
+        // 运行时间
+        log.info("运行时间：{}", endTime - startTime);
+        return CommonResult.success(res);
     }
 
 }
