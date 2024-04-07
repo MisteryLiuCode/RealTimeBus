@@ -14,5 +14,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface TBusLineService extends IService<TBusLine> {
 
     String getBusData();
+    String getBusDataByLineName(String lineName);
 
 }

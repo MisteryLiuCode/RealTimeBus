@@ -45,7 +45,7 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
         // 从缓存中获取
         Object data = redisService.get(REDIS_KEY);
         if (data != null) {
-            return (String)data;
+            return data.toString();
         }
 
         List<LineStationDTO> lineStationDTOList = lineMapper.selectLineStation();
@@ -53,5 +53,14 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
         // 查询结果放入redis
         redisService.set(REDIS_KEY, jsonData);
         return jsonData;
+    }
+
+    @Override
+    public String getBusDataByLineName(String lineName) {
+        List<LineStationDTO> lineStationDTOS = lineMapper.selectLineStationByLineName(lineName);
+        if (lineStationDTOS != null) {
+            return JSON.toJSONString(lineStationDTOS);
+        }
+        return "";
     }
 }

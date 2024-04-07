@@ -46,7 +46,26 @@
         where 1=1
         order by s.stop_number
     </select>
+    <select id="selectLineStationByLineName" parameterType="string"
+            resultMap="BusStationResultMap">
 
+        SELECT
+            l.id,
+            l.line_name,
+            l.service_time,
+            l.first_station_name,
+            l.last_station_name,
+            l.description,
+            s.id as station_id,
+            s.line_id,
+            s.stop_number,
+            s.stop_name
+        from t_bus_line l LEFT JOIN t_bus_stop s ON l.id = s.line_id
+        where 1=1
+        <if test="lineName != null and lineName != ''">
+            and l.line_name = #{lineName}
+        </if>
+    </select>
 
 
 </mapper>
