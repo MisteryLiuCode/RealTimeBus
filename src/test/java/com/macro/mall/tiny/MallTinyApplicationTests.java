@@ -2,11 +2,13 @@ package com.macro.mall.tiny;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
+import com.macro.mall.tiny.common.service.RedisService;
 import com.macro.mall.tiny.modules.timeBus.dto.LineStationDTO;
 import com.macro.mall.tiny.modules.timeBus.mapper.TBusLineMapper;
 import com.macro.mall.tiny.modules.timeBus.service.TBusLineService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -23,6 +25,9 @@ public class MallTinyApplicationTests {
 
     @Resource
     private TBusLineService busLineService;
+
+    @Autowired
+    private RedisService redisService;
 
     @Test
     public void contextLoads() {
@@ -59,5 +64,12 @@ public class MallTinyApplicationTests {
         long end = System.currentTimeMillis();
         log.info("查询数据结果为:{}", busData);
         log.info("执行时间:{}", end - start);
+    }
+
+    @Test
+    public void testRedis(){
+        redisService.set("testRedisKey", "1");
+        Object o = redisService.get("testRedisKey");
+        log.info("redis获取结果为:{}", o.toString());
     }
 }

@@ -32,8 +32,6 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
     private String REDIS_KEY_DATA;
 
 
-    private final String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA;
-
     @Resource
     private TBusLineMapper lineMapper;
 
@@ -43,10 +41,11 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
 
     @Override
     public String getBusData() {
+        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA;
         // 从缓存中获取
-        String data = (String) redisService.get(REDIS_KEY);
+        Object data = redisService.get(REDIS_KEY);
         if (data != null) {
-            return data;
+            return (String)data;
         }
 
         List<LineStationDTO> lineStationDTOList = lineMapper.selectLineStation();
