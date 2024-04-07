@@ -44,9 +44,6 @@
             s.stop_name
         from t_bus_line l LEFT JOIN t_bus_stop s ON l.id = s.line_id
         where 1=1
-<!--        <if test="id != null and id != ''">-->
-<!--            and l.id = #{id}-->
-<!--        </if> -->
         order by s.stop_number
     </select>
 

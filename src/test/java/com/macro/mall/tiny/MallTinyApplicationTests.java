@@ -4,6 +4,7 @@ import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.macro.mall.tiny.modules.timeBus.dto.LineStationDTO;
 import com.macro.mall.tiny.modules.timeBus.mapper.TBusLineMapper;
+import com.macro.mall.tiny.modules.timeBus.service.TBusLineService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +22,7 @@ public class MallTinyApplicationTests {
     private String token;
 
     @Resource
-    private TBusLineMapper lineMapper;
+    private TBusLineService busLineService;
 
     @Test
     public void contextLoads() {
@@ -53,10 +54,10 @@ public class MallTinyApplicationTests {
     public void getLineStation(){
         //开始执行时间
         long start = System.currentTimeMillis();
-        List<LineStationDTO> lineStationDTO = lineMapper.selectLineStation();
+        String busData = busLineService.getBusData();
         // 结束执行时间
         long end = System.currentTimeMillis();
-        log.info("lineStationDTO:{}", JSON.toJSON(lineStationDTO));
+        log.info("查询数据结果为:{}", busData);
         log.info("执行时间:{}", end - start);
     }
 }
