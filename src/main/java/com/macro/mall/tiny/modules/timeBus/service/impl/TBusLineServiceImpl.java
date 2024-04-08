@@ -1,7 +1,9 @@
 package com.macro.mall.tiny.modules.timeBus.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.macro.mall.tiny.common.service.RedisService;
+import com.macro.mall.tiny.modules.timeBus.dto.BusByLineIdsParam;
 import com.macro.mall.tiny.modules.timeBus.dto.LineStationDTO;
 import com.macro.mall.tiny.modules.timeBus.model.TBusLine;
 import com.macro.mall.tiny.modules.timeBus.mapper.TBusLineMapper;
@@ -16,7 +18,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author misteryliu
@@ -31,6 +33,8 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
     @Value("${redis.key.data}")
     private String REDIS_KEY_DATA;
 
+    private String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA;
+
 
     @Resource
     private TBusLineMapper lineMapper;
@@ -41,7 +45,6 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
 
     @Override
     public String getBusData() {
-        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA;
         // 从缓存中获取
         Object data = redisService.get(REDIS_KEY);
         if (data != null) {
@@ -57,10 +60,23 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
 
     @Override
     public String getBusDataByLineName(String lineName) {
-        List<LineStationDTO> lineStationDTOS = lineMapper.selectLineStationByLineName(lineName);
-        if (lineStationDTOS != null) {
-            return JSON.toJSONString(lineStationDTOS);
+        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA + ":" + lineName;
+        // 从缓存中获取
+        Object data = redisService.get(REDIS_KEY);
+        if (data != null) {
+            return data.toString();
         }
-        return "";
+        List<LineStationDTO> lineStationDTOList = lineMapper.selectLineStationByLineName(lineName);
+        String jsonData = JSON.toJSONString(lineStationDTOList);
+        // 查询结果放入redis
+        redisService.set(REDIS_KEY, jsonData);
+        return jsonData;
+    }
+
+    @Override
+    public String getBusDataByLineIds(BusByLineIdsParam busByLineIdsParam) {
+        Object data = redisService.get(REDIS_KEY);
+        JSONObject.parseArray(data.toString(), List.class);
+        return null;
     }
 }

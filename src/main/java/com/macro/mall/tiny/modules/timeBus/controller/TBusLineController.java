@@ -2,15 +2,12 @@ package com.macro.mall.tiny.modules.timeBus.controller;
 
 
 import com.macro.mall.tiny.common.api.CommonResult;
+import com.macro.mall.tiny.modules.timeBus.dto.BusByLineIdsParam;
 import com.macro.mall.tiny.modules.timeBus.service.TBusLineService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -50,6 +47,21 @@ public class TBusLineController {
         // 开始时间
         long startTime = System.currentTimeMillis();
         String res = busLineService.getBusDataByLineName(lineName);
+        // 结束时间
+        long endTime = System.currentTimeMillis();
+        // 运行时间
+        log.info("运行时间：{}", endTime - startTime);
+        return CommonResult.success(res);
+    }
+
+    /**
+     * 批量lineId查询线路
+     */
+    @GetMapping(value = "/getBusDataByLineIds")
+    public CommonResult<String> getBusDataByLineIds(@RequestBody BusByLineIdsParam busByLineIdsParam) {
+        // 开始时间
+        long startTime = System.currentTimeMillis();
+        String res = busLineService.getBusDataByLineIds(busByLineIdsParam);
         // 结束时间
         long endTime = System.currentTimeMillis();
         // 运行时间

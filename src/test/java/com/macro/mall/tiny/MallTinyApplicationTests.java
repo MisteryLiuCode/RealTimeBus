@@ -66,6 +66,20 @@ public class MallTinyApplicationTests {
         log.info("执行时间:{}", end - start);
     }
 
+    /**
+     * 获取一条线路
+     */
+    @Test
+    public void getLineStationByLineName(){
+        //开始执行时间
+        long start = System.currentTimeMillis();
+        String busData = busLineService.getBusDataByLineName("201");
+        // 结束执行时间
+        long end = System.currentTimeMillis();
+        log.info("查询数据结果为:{}", busData);
+        log.info("执行时间:{}", end - start);
+    }
+
     @Test
     public void testRedis(){
         redisService.set("testRedisKey", "1");
