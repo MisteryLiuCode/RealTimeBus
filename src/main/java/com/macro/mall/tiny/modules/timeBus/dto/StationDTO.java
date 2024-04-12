@@ -19,4 +19,10 @@ public class StationDTO {
 
     @ApiModelProperty("站点名称")
     private String stopName;
+
+    @ApiModelProperty("纬度")
+    private Double latitude;
+
+    @ApiModelProperty("经度")
+    private Double longitude;
 }

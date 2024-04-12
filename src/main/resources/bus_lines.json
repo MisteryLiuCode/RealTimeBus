@@ -11,54 +11,73 @@
         "id": 900000183523012,
         "stopNumber": "1",
         "stopName": "马南里",
-        "lineId": "007670584345180"
+        "lineId": "007670584345180",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 900000183523013,
         "stopNumber": "2",
         "stopName": "下一个站点A",
-        "lineId": "007670584345180"
+        "lineId": "007670584345180",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 900000183523014,
         "stopNumber": "3",
         "stopName": "下一个站点A",
-        "lineId": "007670584345180"
+        "lineId": "007670584345180",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 900000183523015,
         "stopNumber": "4",
         "stopName": "下一个站点A",
-        "lineId": "007670584345180"
+        "lineId": "007670584345180",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 900000183523016,
         "stopNumber": "5",
         "stopName": "下一个站点A",
-        "lineId": "007670584345180"
+        "lineId": "007670584345180",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 900000183523017,
         "stopNumber": "6",
         "stopName": "下一个站点A",
-        "lineId": "007670584345180"
-      },      {
-          "id": 900000183523018,
-          "stopNumber": "7",
-          "stopName": "下一个站点A",
-          "lineId": "007670584345180"
-        },
+        "lineId": "007670584345180",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
+      },
+      {
+        "id": 900000183523018,
+        "stopNumber": "7",
+        "stopName": "下一个站点A",
+        "lineId": "007670584345180",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
+      },
       {
         "id": 900000183523019,
         "stopNumber": "8",
         "stopName": "下一个站点A",
-        "lineId": "007670584345180"
+        "lineId": "007670584345180",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 900000183523030,
         "stopNumber": "N",
         "stopName": "地铁孙河站",
-        "lineId": "007670584345180"
+        "lineId": "007670584345180",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       }
     ]
   },
@@ -74,61 +93,81 @@
         "id": 110100013290001,
         "stopNumber": "1",
         "stopName": "沙子营公交场站",
-        "lineId": "000000058250561"
+        "lineId": "000000058250561",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 110100013290002,
         "stopNumber": "2",
         "stopName": "下一个站点B",
-        "lineId": "000000058250561"
+        "lineId": "000000058250561",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 110100013290003,
         "stopNumber": "3",
         "stopName": "下一个站点B",
-        "lineId": "000000058250561"
+        "lineId": "000000058250561",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 110100013290004,
         "stopNumber": "4",
         "stopName": "下一个站点B",
-        "lineId": "000000058250561"
+        "lineId": "000000058250561",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 110100013290005,
         "stopNumber": "5",
         "stopName": "下一个站点B",
-        "lineId": "000000058250561"
+        "lineId": "000000058250561",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 110100013290006,
         "stopNumber": "6",
         "stopName": "下一个站点B",
-        "lineId": "000000058250561"
+        "lineId": "000000058250561",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 110100013290007,
         "stopNumber": "7",
         "stopName": "下一个站点B",
-        "lineId": "000000058250561"
+        "lineId": "000000058250561",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 110100013290008,
         "stopNumber": "8",
         "stopName": "下一个站点B",
-        "lineId": "000000058250561"
+        "lineId": "000000058250561",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 110100013290009,
         "stopNumber": "9",
         "stopName": "下一个站点B",
-        "lineId": "000000058250561"
+        "lineId": "000000058250561",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       },
       {
         "id": 110100013290030,
         "stopNumber": "N",
         "stopName": "地铁孙河站",
-        "lineId": "000000058250561"
+        "lineId": "000000058250561",
+        "latitude": "116.3445",
+        "longitude": "34.364343"
       }
     ]
   }

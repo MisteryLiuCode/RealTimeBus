@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.*;
 
 /**
  * <p>
@@ -67,6 +68,34 @@ public class TBusLineController {
         // 运行时间
         log.info("运行时间：{}", endTime - startTime);
         return CommonResult.success(res);
+    }
+
+    @RequestMapping(value = "/getDataByJsonFile")
+    public String getData() {
+        String str = readJsonFile("src/main/resources/bus_lines.json");
+        log.info(str);
+        return str;
+    }
+
+    public static String readJsonFile(String fileName) {
+        String jsonStr = "";
+        try {
+            File jsonFile = new File(fileName);
+            FileReader fileReader = new FileReader(jsonFile);
+            Reader reader = new InputStreamReader(new FileInputStream(jsonFile),"utf-8");
+            int ch = 0;
+            StringBuffer sb = new StringBuffer();
+            while ((ch = reader.read()) != -1) {
+                sb.append((char) ch);
+            }
+            fileReader.close();
+            reader.close();
+            jsonStr = sb.toString();
+            return jsonStr;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

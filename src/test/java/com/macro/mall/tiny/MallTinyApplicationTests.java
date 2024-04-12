@@ -2,6 +2,8 @@ package com.macro.mall.tiny;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.macro.mall.tiny.common.api.CommonResult;
 import com.macro.mall.tiny.common.service.RedisService;
 import com.macro.mall.tiny.modules.timeBus.dto.LineStationDTO;
 import com.macro.mall.tiny.modules.timeBus.mapper.TBusLineMapper;
@@ -73,10 +75,10 @@ public class MallTinyApplicationTests {
     public void getLineStationByLineName(){
         //开始执行时间
         long start = System.currentTimeMillis();
-        String busData = busLineService.getBusDataByLineName("201");
+        String busData = busLineService.getBusDataByLineName("专201");
         // 结束执行时间
         long end = System.currentTimeMillis();
-        log.info("查询数据结果为:{}", busData);
+        log.info("查询数据结果为:{}", JSONObject.toJSONString(CommonResult.success(busData)));
         log.info("执行时间:{}", end - start);
     }
 

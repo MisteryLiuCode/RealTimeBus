@@ -67,6 +67,12 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
             return data.toString();
         }
         List<LineStationDTO> lineStationDTOList = lineMapper.selectLineStationByLineName(lineName);
+        lineStationDTOList.stream().forEach(lineStationDTO -> {
+            lineStationDTO.getStations().stream().forEach(stationDTO -> {
+                stationDTO.setLatitude(39.915);
+                stationDTO.setLongitude(116.404);
+            });
+        });
         String jsonData = JSON.toJSONString(lineStationDTOList);
         // 查询结果放入redis
         redisService.set(REDIS_KEY, jsonData);
