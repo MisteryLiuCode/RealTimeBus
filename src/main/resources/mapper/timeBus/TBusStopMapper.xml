@@ -11,5 +11,17 @@
         <result column="createtime" property="createtime" />
         <result column="updatetime" property="updatetime" />
     </resultMap>
+    <update id="updateByStopName">
+        update t_bus_stop
+        <set>
+            <if test="longitude != null">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude},
+            </if>
+        </set>
+        where stop_name = #{stopName}
+    </update>
 
 </mapper>

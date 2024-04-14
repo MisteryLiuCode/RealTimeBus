@@ -141,6 +141,12 @@
             <artifactId>arrow-vector</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
