@@ -36,6 +36,12 @@ public class TBusStop implements Serializable {
     @ApiModelProperty("站点名称")
     private String stopName;
 
+    @ApiModelProperty("站点经度")
+    private Double longitude;
+
+    @ApiModelProperty("站点纬度")
+    private Double latitude;
+
     @ApiModelProperty("创建时间")
     private Date createtime;
 
