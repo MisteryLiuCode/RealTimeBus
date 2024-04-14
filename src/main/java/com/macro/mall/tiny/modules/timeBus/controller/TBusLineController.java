@@ -47,7 +47,7 @@ public class TBusLineController {
 
     // 拿到搜索的线路
     @ApiOperation(value = "以线路名称搜索列表")
-    @GetMapping(value = "/getBusDataByLineName/{lineName}")
+    @RequestMapping(value = "/getBusDataByLineName/{lineName}",method = RequestMethod.GET)
     public CommonResult<String> getBusDataByLineName(@PathVariable String lineName) {
         // 开始时间
         long startTime = System.currentTimeMillis();

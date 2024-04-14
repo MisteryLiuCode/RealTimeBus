@@ -40,7 +40,7 @@ public class TimeBusController {
      * 获取实时数据通用接口
      */
     @ApiOperation(value = "实时数据通用接口", notes = "实时数据通用接口")
-    @PostMapping(value = "/busRealtime")
+    @RequestMapping(value = "/busRealtime", method = RequestMethod.POST)
     public CommonResult<String> busRealtime(@RequestBody BusRealTimeParam busRealTimeParam) {
         return CommonResult.success(timeBusService.busRealtime(busRealTimeParam));
     }
