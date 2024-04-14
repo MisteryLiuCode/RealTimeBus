@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 @Slf4j
-@Api(tags = "MapController")
-@Tag(name = "MapController", description = "MapController")
+//@Api(tags = "MapController")
+//@Tag(name = "MapController", description = "MapController")
 @RequestMapping("/timeBus")
 @RestController
 public class MapController {
@@ -24,7 +24,7 @@ public class MapController {
     /**
      * 经纬度获取城市
      */
-    @RequestMapping("/getCity")
+//    @RequestMapping("/getCity")
     public String getCity(@RequestBody LocationInfoParam location ) {
         mapService.getCity(location);
         return null;

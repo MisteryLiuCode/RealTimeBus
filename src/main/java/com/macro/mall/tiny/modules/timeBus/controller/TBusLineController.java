@@ -5,6 +5,7 @@ import com.macro.mall.tiny.common.api.CommonResult;
 import com.macro.mall.tiny.modules.timeBus.dto.BusByLineIdsParam;
 import com.macro.mall.tiny.modules.timeBus.service.TBusLineService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,7 @@ public class TBusLineController {
     }
 
     // 拿到搜索的线路
+    @ApiOperation(value = "以线路名称搜索列表")
     @GetMapping(value = "/getBusDataByLineName/{lineName}")
     public CommonResult<String> getBusDataByLineName(@PathVariable String lineName) {
         // 开始时间
