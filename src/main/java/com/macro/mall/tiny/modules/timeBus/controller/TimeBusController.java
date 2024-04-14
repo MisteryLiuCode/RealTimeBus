@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 
@@ -23,12 +24,14 @@ public class TimeBusController {
 
     @ApiOperation(value = "857", notes = "857")
     @GetMapping(value = "/bus857")
+    @ApiIgnore
     public CommonResult<String> timeBus857Sunhe() {
         return CommonResult.success(timeBusService.timeBus857Sunhe());
     }
 
     @ApiOperation(value = "201", notes = "201")
     @GetMapping(value = "/bus201")
+    @ApiIgnore
     public CommonResult<String> timeBus201Sunhe() {
         return CommonResult.success(timeBusService.timeBus201Sunhe());
     }

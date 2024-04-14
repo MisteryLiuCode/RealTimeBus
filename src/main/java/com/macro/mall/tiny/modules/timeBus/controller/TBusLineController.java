@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import java.io.*;
@@ -32,6 +33,7 @@ public class TBusLineController {
     private TBusLineService busLineService;
 
     @RequestMapping(value = "/getBusData")
+    @ApiIgnore
     public CommonResult<String> getBusData() {
         // 开始时间
         long startTime = System.currentTimeMillis();
@@ -61,6 +63,7 @@ public class TBusLineController {
      * 批量lineId查询线路
      */
     @GetMapping(value = "/getBusDataByLineIds")
+    @ApiIgnore
     public CommonResult<String> getBusDataByLineIds(@RequestBody BusByLineIdsParam busByLineIdsParam) {
         // 开始时间
         long startTime = System.currentTimeMillis();
@@ -73,6 +76,7 @@ public class TBusLineController {
     }
 
     @RequestMapping(value = "/getDataByJsonFile")
+    @ApiIgnore
     public String getData() {
         String str = readJsonFile("src/main/resources/bus_lines.json");
         log.info(str);
