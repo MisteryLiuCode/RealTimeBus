@@ -1,7 +1,6 @@
 package com.macro.mall.tiny.modules.timeBus.service;
 
 import com.macro.mall.tiny.modules.timeBus.dto.BusRealTimeParam;
-import com.macro.mall.tiny.modules.timeBus.dto.MapStaionLocation;
 
 public interface TimeBusService {
 

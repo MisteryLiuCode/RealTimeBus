@@ -2,7 +2,6 @@ package com.macro.mall.tiny.modules.timeBus.controller;
 
 import com.macro.mall.tiny.common.api.CommonResult;
 import com.macro.mall.tiny.modules.timeBus.dto.BusRealTimeParam;
-import com.macro.mall.tiny.modules.timeBus.dto.MapStaionLocation;
 import com.macro.mall.tiny.modules.timeBus.service.TimeBusService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

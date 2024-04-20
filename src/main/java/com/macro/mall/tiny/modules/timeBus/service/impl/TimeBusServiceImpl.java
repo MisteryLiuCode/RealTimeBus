@@ -127,7 +127,6 @@ public class TimeBusServiceImpl implements TimeBusService {
 
     @Override
     public String getStaionLocation(BusRealTimeParam busRealTimeParam) {
-
         MapStaionLocation mapStaionLocation = new MapStaionLocation();
         TBusStop tBusStop = tBusStopMapper.selectById(busRealTimeParam.getStationId());
 
@@ -163,6 +162,8 @@ public class TimeBusServiceImpl implements TimeBusService {
                         mapStaionLocation.setDesc(desc.toString());
                         mapStaionLocation.setLatitude(tBusStop.getLatitude());
                         mapStaionLocation.setLongitude(tBusStop.getLongitude());
+                        mapStaionLocation.setArriveStation(tBusStop.getStopName());
+                        mapStaionLocation.setArriveTime(trip.getEta() / 60);
                     }
                     for (int i = 0; i < trips.size(); i++) {
                         Trip t = trips.get(i);
