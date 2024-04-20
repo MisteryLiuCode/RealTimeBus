@@ -32,9 +32,10 @@ redis:
   key:
     admin: 'ums:admin'
     resourceList: 'ums:resourceList'
-    data: 'ios:data'
+  iosKey:
+    searchLine: 'ios:searchLine'
   harmonyKey:
-    data: 'harmony:data'
+    searchLine: 'harmony:searchLine'
   expire:
     common: 86400 # 24小时
 

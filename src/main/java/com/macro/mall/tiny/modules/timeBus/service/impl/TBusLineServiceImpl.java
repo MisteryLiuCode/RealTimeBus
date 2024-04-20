@@ -31,7 +31,7 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
     @Value("${redis.database}")
     private String REDIS_DATABASE;
 
-    @Value("${redis.key.data}")
+    @Value("${redis.iosKey.searchLine}")
     private String REDIS_KEY_DATA;
 
     private String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA;

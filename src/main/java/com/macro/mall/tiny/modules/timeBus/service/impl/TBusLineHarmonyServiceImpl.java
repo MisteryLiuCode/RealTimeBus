@@ -32,7 +32,7 @@ public class TBusLineHarmonyServiceImpl extends ServiceImpl<TBusLineMapper, TBus
     @Value("${redis.database}")
     private String REDIS_DATABASE;
 
-    @Value("${redis.harmonyKey.data}")
+    @Value("${redis.harmonyKey.searchLine}")
     private String REDIS_HARMONY_KEY_DATA;
 
     private String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_HARMONY_KEY_DATA;
