@@ -25,6 +25,8 @@ import java.io.*;
 @Slf4j
 @RestController
 @RequestMapping("/timeBus/tBusLine")
+@Api(tags = "TBusLineController")
+@Tag(name = "TBusLineController", description = "TBusLineController")
 public class TBusLineController {
 
     @Resource
@@ -46,7 +48,6 @@ public class TBusLineController {
     // 拿到搜索的线路
     @ApiOperation(value = "以线路名称搜索列表")
     @RequestMapping(value = "/getBusDataByLineName/{lineName}",method = RequestMethod.GET)
-    @ApiIgnore
     public CommonResult<String> getBusDataByLineName(@PathVariable String lineName) {
         // 开始时间
         long startTime = System.currentTimeMillis();
