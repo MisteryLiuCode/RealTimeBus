@@ -3,6 +3,7 @@ package com.macro.mall.tiny.modules.timeBus.controller;
 
 import com.macro.mall.tiny.common.api.CommonResult;
 import com.macro.mall.tiny.modules.timeBus.dto.BusByLineIdsParam;
+import com.macro.mall.tiny.modules.timeBus.service.TBusLineHarmonyService;
 import com.macro.mall.tiny.modules.timeBus.service.TBusLineService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,14 +31,14 @@ import java.io.*;
 public class TBusLineHarmonyController {
 
     @Resource
-    private TBusLineService busLineService;
+    private TBusLineHarmonyService busLineHarmonyService;
 
     @RequestMapping(value = "/getBusData")
     @ApiIgnore
     public CommonResult<String> getBusData() {
         // 开始时间
         long startTime = System.currentTimeMillis();
-        String res = busLineService.getBusData();
+        String res = busLineHarmonyService.getBusData();
         // 结束时间
         long endTime = System.currentTimeMillis();
         // 运行时间
@@ -51,7 +52,7 @@ public class TBusLineHarmonyController {
     public CommonResult<String> getBusDataByLineName(@PathVariable String lineName) {
         // 开始时间
         long startTime = System.currentTimeMillis();
-        String res = busLineService.getBusDataByLineName(lineName);
+        String res = busLineHarmonyService.getBusDataByLineName(lineName);
         // 结束时间
         long endTime = System.currentTimeMillis();
         // 运行时间
@@ -67,7 +68,7 @@ public class TBusLineHarmonyController {
     public CommonResult<String> getBusDataByLineIds(@RequestBody BusByLineIdsParam busByLineIdsParam) {
         // 开始时间
         long startTime = System.currentTimeMillis();
-        String res = busLineService.getBusDataByLineIds(busByLineIdsParam);
+        String res = busLineHarmonyService.getBusDataByLineIds(busByLineIdsParam);
         // 结束时间
         long endTime = System.currentTimeMillis();
         // 运行时间

@@ -33,6 +33,8 @@ redis:
     admin: 'ums:admin'
     resourceList: 'ums:resourceList'
     data: 'timeBus:data'
+  harmonyKey:
+    data: 'timeBus:data'
   expire:
     common: 86400 # 24小时
 

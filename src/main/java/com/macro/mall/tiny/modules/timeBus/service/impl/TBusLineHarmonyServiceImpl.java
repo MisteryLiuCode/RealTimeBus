@@ -2,14 +2,15 @@ package com.macro.mall.tiny.modules.timeBus.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.macro.mall.tiny.common.service.RedisService;
 import com.macro.mall.tiny.modules.timeBus.dto.BusByLineIdsParam;
 import com.macro.mall.tiny.modules.timeBus.dto.LineStationDTO;
 import com.macro.mall.tiny.modules.timeBus.dto.SearchResult;
-import com.macro.mall.tiny.modules.timeBus.model.TBusLine;
 import com.macro.mall.tiny.modules.timeBus.mapper.TBusLineMapper;
+import com.macro.mall.tiny.modules.timeBus.model.TBusLine;
+import com.macro.mall.tiny.modules.timeBus.service.TBusLineHarmonyService;
 import com.macro.mall.tiny.modules.timeBus.service.TBusLineService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,15 +27,15 @@ import java.util.List;
  * @since 2024-04-06
  */
 @Service
-public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> implements TBusLineService {
+public class TBusLineHarmonyServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> implements TBusLineHarmonyService {
 
     @Value("${redis.database}")
     private String REDIS_DATABASE;
 
-    @Value("${redis.key.data}")
-    private String REDIS_KEY_DATA;
+    @Value("${redis.harmonyKey.data}")
+    private String REDIS_HARMONY_KEY_DATA;
 
-    private String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA;
+    private String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_HARMONY_KEY_DATA;
 
 
     @Resource
@@ -47,7 +48,7 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
     @Override
     public String getBusData() {
         // 从缓存中获取
-        Object data = redisService.get(REDIS_KEY);
+        Object data = redisService.get(REDIS_HARMONY_KEY_DATA);
         if (data != null) {
             return data.toString();
         }
@@ -55,20 +56,23 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
         List<LineStationDTO> lineStationDTOList = lineMapper.selectLineStation();
         String jsonData = JSON.toJSONString(lineStationDTOList);
         // 查询结果放入redis
-        redisService.set(REDIS_KEY, jsonData);
+        redisService.set(REDIS_HARMONY_KEY_DATA, jsonData);
         return jsonData;
     }
 
     @Override
     public String getBusDataByLineName(String lineName) {
-        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA + ":" + lineName;
+        SearchResult searchResult = new SearchResult();
+        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_HARMONY_KEY_DATA + ":" + lineName;
         // 从缓存中获取
         Object data = redisService.get(REDIS_KEY);
         if (data != null) {
             return data.toString();
         }
         List<LineStationDTO> lineStationDTOList = lineMapper.selectLineStationByLineName(lineName);
-        String jsonData = JSON.toJSONString(lineStationDTOList);
+        searchResult.setLineStationDTOList(lineStationDTOList);
+        searchResult.setSearchLineName(lineName);
+        String jsonData = JSON.toJSONString(searchResult);
         // 查询结果放入redis
         redisService.set(REDIS_KEY, jsonData);
         return jsonData;
