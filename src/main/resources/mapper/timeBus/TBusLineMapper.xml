@@ -26,6 +26,8 @@
             <result column="line_id" property="lineId" jdbcType="VARCHAR" />
             <result column="stop_number" property="stopNumber" jdbcType="VARCHAR" />
             <result column="stop_name" property="stopName" jdbcType="VARCHAR" />
+            <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+            <result column="longitude" property="longitude" jdbcType="VARCHAR" />
         </collection>
     </resultMap>
     
@@ -41,7 +43,9 @@
             s.id as station_id,
             s.line_id,
             s.stop_number,
-            s.stop_name
+            s.stop_name,
+            s.latitude,
+            s.longitude
         from t_bus_line l LEFT JOIN t_bus_stop s ON l.id = s.line_id
         where 1=1
         order by s.stop_number
@@ -59,7 +63,9 @@
             s.id as station_id,
             s.line_id,
             s.stop_number,
-            s.stop_name
+            s.stop_name,
+            s.latitude,
+            s.longitude
         from t_bus_line l LEFT JOIN t_bus_stop s ON l.id = s.line_id
         where 1=1
         <if test="lineName != null and lineName != ''">

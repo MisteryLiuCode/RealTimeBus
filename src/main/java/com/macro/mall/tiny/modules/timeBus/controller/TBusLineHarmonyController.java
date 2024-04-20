@@ -23,9 +23,11 @@ import java.io.*;
  * @since 2024-04-06
  */
 @Slf4j
+@Api(tags = "TBusLineHarmonyController")
+@Tag(name = "TBusLineHarmonyController", description = "TBusLineHarmonyController")
 @RestController
-@RequestMapping("/timeBus/tBusLine")
-public class TBusLineController {
+@RequestMapping("/timeBus/tBusLineHarmony")
+public class TBusLineHarmonyController {
 
     @Resource
     private TBusLineService busLineService;
@@ -46,7 +48,6 @@ public class TBusLineController {
     // 拿到搜索的线路
     @ApiOperation(value = "以线路名称搜索列表")
     @RequestMapping(value = "/getBusDataByLineName/{lineName}",method = RequestMethod.GET)
-    @ApiIgnore
     public CommonResult<String> getBusDataByLineName(@PathVariable String lineName) {
         // 开始时间
         long startTime = System.currentTimeMillis();
@@ -61,8 +62,8 @@ public class TBusLineController {
     /**
      * 批量lineId查询线路
      */
-    @GetMapping(value = "/getBusDataByLineIds")
     @ApiIgnore
+    @GetMapping(value = "/getBusDataByLineIds")
     public CommonResult<String> getBusDataByLineIds(@RequestBody BusByLineIdsParam busByLineIdsParam) {
         // 开始时间
         long startTime = System.currentTimeMillis();

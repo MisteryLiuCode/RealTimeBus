@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.macro.mall.tiny.common.service.RedisService;
 import com.macro.mall.tiny.modules.timeBus.dto.BusByLineIdsParam;
 import com.macro.mall.tiny.modules.timeBus.dto.LineStationDTO;
+import com.macro.mall.tiny.modules.timeBus.dto.SearchResult;
 import com.macro.mall.tiny.modules.timeBus.model.TBusLine;
 import com.macro.mall.tiny.modules.timeBus.mapper.TBusLineMapper;
 import com.macro.mall.tiny.modules.timeBus.service.TBusLineService;
@@ -60,6 +61,7 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
 
     @Override
     public String getBusDataByLineName(String lineName) {
+        SearchResult searchResult = new SearchResult();
         String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA + ":" + lineName;
         // 从缓存中获取
         Object data = redisService.get(REDIS_KEY);
@@ -67,13 +69,9 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
             return data.toString();
         }
         List<LineStationDTO> lineStationDTOList = lineMapper.selectLineStationByLineName(lineName);
-        lineStationDTOList.stream().forEach(lineStationDTO -> {
-            lineStationDTO.getStations().stream().forEach(stationDTO -> {
-                stationDTO.setLatitude(39.915);
-                stationDTO.setLongitude(116.404);
-            });
-        });
-        String jsonData = JSON.toJSONString(lineStationDTOList);
+        searchResult.setLineStationDTOList(lineStationDTOList);
+        searchResult.setSearchLineName(lineName);
+        String jsonData = JSON.toJSONString(searchResult);
         // 查询结果放入redis
         redisService.set(REDIS_KEY, jsonData);
         return jsonData;

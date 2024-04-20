@@ -51,6 +51,7 @@ public class TimeBusController {
      */
     @ApiOperation(value = "首页地图展示", notes = "首页地图展示")
     @RequestMapping(value = "/busMap", method = RequestMethod.POST)
+    @ApiIgnore
     public CommonResult<String> busMap(@RequestBody BusRealTimeParam busRealTimeParam) {
         return CommonResult.success(timeBusService.getStaionLocation(busRealTimeParam));
     }
