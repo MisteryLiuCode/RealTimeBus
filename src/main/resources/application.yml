@@ -59,8 +59,7 @@ secure:
       - /timeBus/**
       - /getData
       - /getBusData
-      - /timeBus/tBusLine/*
-      - /timeBus/busMap
-      - /timeBus/tBusLine/getDataByJsonFile
+      - /timeBus/busRealtime
+
 bjbus:
   token: eyJhbGciOiJIUzI1NiIsIlR5cGUiOiJKd3QiLCJ0eXAiOiJKV1QifQ.eyJwYXNzd29yZCI6IjY0ODU5MTQzNSIsInVzZXJOYW1lIjoiYmpidXMiLCJleHAiOjE3MTYwOTExOTl9.E9KyPUNhSuVd3Ow3YK2cb5DCHhdO2QueMvIf9ey5zCM
