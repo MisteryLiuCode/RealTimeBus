@@ -31,47 +31,6 @@ public class TimeBusServiceImpl implements TimeBusService {
 
     @Override
     public String busRealtime(BusRealTimeParam busRealTimeParam) {
-
-        RealTimeBusDTO realTimeBusDTO = new RealTimeBusDTO();
-        String conditionstr = busRealTimeParam.getLineId() + "-" + busRealTimeParam.getStationId();
-
-        String timeBus201SunheUrl = "https://www.bjbus.com/api/api_etartime.php?conditionstr=" + conditionstr + "&token=" + token;
-        String result = HttpUtil.createGet(timeBus201SunheUrl).contentType("application/json").execute().body();
-        log.info("result:{}", result);
-        TimeBus timeBus = JSONObject.parseObject(result, TimeBus.class);
-        StringBuilder res = new StringBuilder();
-        if (timeBus.getErrorCode() != 10000) {
-            res.append("接口调用失败:").append(timeBus.getMsg());
-        }
-        Trip firstTrip = new Trip();
-        if (CollectionUtils.isNotEmpty(timeBus.getData())) {
-            Data data = timeBus.getData().get(0);
-            if (Objects.nonNull(data.getDatas())) {
-                List<Trip> trips = data.getDatas().getTrip();
-                if (trips != null) {
-                    Collections.sort(trips, (t1, t2) -> {
-                        // 降序排序，如果你想要升序，只需交换t1和t2的位置
-                        return Integer.compare(t2.getIndex(), t1.getIndex());
-                    });
-                    firstTrip = trips.get(0);
-                    for (int i = 0; i < trips.size(); i++) {
-                        Trip t = trips.get(i);
-                        log.info("{}第{}辆车;还有{}站", busRealTimeParam, t.getIndex() + 1, t.getStationLeft());
-                        res.append("第").append(i + 1).append("辆车还有").append(t.getStationLeft()).append("站;");
-                    }
-                } else {
-                    res.append("没有车");
-                }
-            }
-        }
-        realTimeBusDTO.setDetailDesc(res.toString());
-        realTimeBusDTO.setArriveTime(firstTrip.getEta()/60);
-        log.info("实时到站信息结果:{}", JSONObject.toJSONString(realTimeBusDTO));
-        return JSONObject.toJSONString(realTimeBusDTO);
-    }
-
-    @Override
-    public String getStaionLocation(BusRealTimeParam busRealTimeParam) {
         MapStaionLocation mapStaionLocation = new MapStaionLocation();
         List<TimeBusDTO> timeBusDTOS = new ArrayList<>();
         TBusStop tBusStop = tBusStopMapper.selectById(busRealTimeParam.getStationId());

@@ -30,14 +30,4 @@ public class TimeBusController {
     public CommonResult<String> busRealtime(@RequestBody BusRealTimeParam busRealTimeParam) {
         return CommonResult.success(timeBusService.busRealtime(busRealTimeParam));
     }
-
-    /**
-     * 首页地图展示 eg:还有三站到达xxx站
-     */
-    @ApiOperation(value = "首页地图展示", notes = "首页地图展示")
-    @RequestMapping(value = "/busMap", method = RequestMethod.POST)
-    @ApiIgnore
-    public CommonResult<String> busMap(@RequestBody BusRealTimeParam busRealTimeParam) {
-        return CommonResult.success(timeBusService.getStaionLocation(busRealTimeParam));
-    }
 }

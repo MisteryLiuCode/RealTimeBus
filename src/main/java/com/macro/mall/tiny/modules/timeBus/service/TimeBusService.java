@@ -5,6 +5,4 @@ import com.macro.mall.tiny.modules.timeBus.dto.BusRealTimeParam;
 public interface TimeBusService {
 
     String busRealtime(BusRealTimeParam busRealTimeParam);
-
-    String getStaionLocation(BusRealTimeParam busRealTimeParam);
 }
