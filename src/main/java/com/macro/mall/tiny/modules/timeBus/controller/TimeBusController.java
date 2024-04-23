@@ -22,20 +22,6 @@ public class TimeBusController {
     @Resource
     private TimeBusService timeBusService;
 
-    @ApiOperation(value = "857", notes = "857")
-    @GetMapping(value = "/bus857")
-    @ApiIgnore
-    public CommonResult<String> timeBus857Sunhe() {
-        return CommonResult.success(timeBusService.timeBus857Sunhe());
-    }
-
-    @ApiOperation(value = "201", notes = "201")
-    @GetMapping(value = "/bus201")
-    @ApiIgnore
-    public CommonResult<String> timeBus201Sunhe() {
-        return CommonResult.success(timeBusService.timeBus201Sunhe());
-    }
-
     /**
      * 获取实时数据通用接口
      */
