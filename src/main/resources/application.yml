@@ -57,7 +57,7 @@ secure:
       - /admin/info
       - /admin/logout
       - /timeBus/busRealtime
-      - /timeBus/tBusLine/getBusDataByLineIds
+      - /timeBus/tBusLine/getBusDataByLineIds/**
 
 bjbus:
   token: eyJhbGciOiJIUzI1NiIsIlR5cGUiOiJKd3QiLCJ0eXAiOiJKV1QifQ.eyJwYXNzd29yZCI6IjY0ODU5MTQzNSIsInVzZXJOYW1lIjoiYmpidXMiLCJleHAiOjE3MTYwOTExOTl9.E9KyPUNhSuVd3Ow3YK2cb5DCHhdO2QueMvIf9ey5zCM
