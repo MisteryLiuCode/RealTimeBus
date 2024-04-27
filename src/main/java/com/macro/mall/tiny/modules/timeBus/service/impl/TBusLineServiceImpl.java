@@ -84,6 +84,7 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
             String destinationLonLat = getStationByLineIds(searchParam.getSearchText());
             if (StringUtils.isNotBlank(destinationLonLat)) {
                 List<String> lineNameList = getLineByDestination(searchParam, destinationLonLat);
+                log.info("按照目的地搜索的线路名称：" + JSONObject.toJSONString(lineNameList));
                 lineStationDTOList = lineMapper.selectLineStationByLineName(null, lineNameList);
                 log.info("按照目的地搜索的线路结果：" + JSONObject.toJSONString(lineStationDTOList));
             }
