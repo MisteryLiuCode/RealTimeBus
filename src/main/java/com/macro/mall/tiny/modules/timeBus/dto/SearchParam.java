@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 public class SearchParam {
 
     @ApiModelProperty("搜索内容")
-    private String search;
+    private String searchText;
 
     @ApiModelProperty("所在位置经度")
     private Double longitude;

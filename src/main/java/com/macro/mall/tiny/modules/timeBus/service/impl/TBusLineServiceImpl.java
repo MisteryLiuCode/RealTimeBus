@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -67,21 +68,23 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
 
     @Override
     public String getBusDataByLineName(SearchParam searchParam) {
-        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA + ":" + searchParam;
-        // 从缓存中获取
-        Object data = redisService.get(REDIS_KEY);
-        if (data != null) {
-            return data.toString();
-        }
+//        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA + ":" + searchParam;
+//        // 从缓存中获取
+//        Object data = redisService.get(REDIS_KEY);
+//        if (data != null) {
+//            return data.toString();
+//        }
         // 从数据库里查询
         List<LineStationDTO> lineStationDTOList;
-        lineStationDTOList = lineMapper.selectLineStationByLineName(searchParam.getSearch(), null);
+        lineStationDTOList = lineMapper.selectLineStationByLineName(searchParam.getSearchText(), null);
         if (lineStationDTOList.size() == 0) {
+            log.info("开始按照目的地搜索");
             // 调用高德目的地搜索
-            String destinationLonLat = getStationByLineIds(searchParam.getSearch());
+            String destinationLonLat = getStationByLineIds(searchParam.getSearchText());
             if (StringUtils.isNotBlank(destinationLonLat)) {
                 List<String> lineNameList = getLineByDestination(searchParam, destinationLonLat);
                 lineStationDTOList = lineMapper.selectLineStationByLineName(null, lineNameList);
+                log.info("按照目的地搜索的线路结果：" + JSONObject.toJSONString(lineStationDTOList));
             }
         }
         String jsonData = "";
