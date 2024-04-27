@@ -68,6 +68,7 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
 
     @Override
     public String getBusDataByLineName(SearchParam searchParam) {
+        searchParam.setSearchText("金辉大厦");
 //        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA + ":" + searchParam;
 //        // 从缓存中获取
 //        Object data = redisService.get(REDIS_KEY);
@@ -150,7 +151,8 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
         log.info("需要地理编码的位置", placeName);
 
         try {
-            String url = baseUrl + "address=" + placeName + "&cityCode=010" + "&output=json&key=" + apiKey;
+            String url = baseUrl + "address=北京市" + placeName + "&cityCode=010" + "&output=json&key=" + apiKey;
+            log.info("获取一个地方的经纬度,请求地址: {}", url);
             String resp = HttpUtil.createGet(url).execute().body();
             StopLocation location = JSONObject.parseObject(resp, StopLocation.class);
 
