@@ -3,6 +3,8 @@ package com.macro.mall.tiny.modules.timeBus.controller;
 
 import com.macro.mall.tiny.common.api.CommonResult;
 import com.macro.mall.tiny.modules.timeBus.dto.BusByLineIdsParam;
+import com.macro.mall.tiny.modules.timeBus.dto.BusRealTimeParam;
+import com.macro.mall.tiny.modules.timeBus.dto.SearchParam;
 import com.macro.mall.tiny.modules.timeBus.service.TBusLineService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,11 +49,11 @@ public class TBusLineController {
 
     // 拿到搜索的线路
     @ApiOperation(value = "以线路名称搜索列表")
-    @RequestMapping(value = "/getBusDataByLineName/{lineName}",method = RequestMethod.GET)
-    public CommonResult<String> getBusDataByLineName(@PathVariable String lineName) {
+    @RequestMapping(value = "/searchBusLine",method = RequestMethod.POST)
+    public CommonResult<String> getBusDataByLineName(@RequestBody SearchParam searchParam) {
         // 开始时间
         long startTime = System.currentTimeMillis();
-        String res = busLineService.getBusDataByLineName(lineName);
+        String res = busLineService.getBusDataByLineName(searchParam);
         // 结束时间
         long endTime = System.currentTimeMillis();
         // 运行时间

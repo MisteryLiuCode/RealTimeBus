@@ -37,7 +37,7 @@ redis:
   harmonyKey:
     searchLine: 'harmony:searchLine'
   expire:
-    common: 86400 # 24小时
+    common: 28800 # 24小时
 
 secure:
   ignored:
@@ -57,7 +57,7 @@ secure:
       - /admin/info
       - /admin/logout
       - /timeBus/busRealtime
-      - /timeBus/tBusLine/getBusDataByLineName/**
+      - /timeBus/tBusLine/searchBusLine
       - /timeBus/tBusLineHarmony/getBusDataByLineName/**
 
 bjbus:

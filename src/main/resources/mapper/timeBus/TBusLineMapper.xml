@@ -66,11 +66,17 @@
             s.stop_name,
             s.latitude,
             s.longitude
-        from t_bus_line l LEFT JOIN t_bus_stop s ON l.id = s.line_id
+        from t_bus_line l JOIN t_bus_stop s ON l.id = s.line_id
         where 1=1
         <if test="lineName != null and lineName != ''">
             and l.line_name like
                 concat('%',#{lineName},'%')
+        </if>
+        <if test="lineNameList != null and lineNameList.size() > 0">
+            AND l.line_name IN
+            <foreach item="name" collection="lineNameList" open="(" separator="," close=")">
+                #{name}
+            </foreach>
         </if>
         order by s.stop_number
     </select>

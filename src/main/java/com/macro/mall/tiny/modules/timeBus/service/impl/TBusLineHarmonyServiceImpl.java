@@ -69,7 +69,7 @@ public class TBusLineHarmonyServiceImpl extends ServiceImpl<TBusLineMapper, TBus
         if (data != null) {
             return data.toString();
         }
-        List<LineStationDTO> lineStationDTOList = lineMapper.selectLineStationByLineName(lineName);
+        List<LineStationDTO> lineStationDTOList = lineMapper.selectLineStationByLineName(lineName,null);
         searchResult.setLineStationDTOList(lineStationDTOList);
         searchResult.setSearchLineName(lineName);
         String jsonData = JSON.toJSONString(searchResult);

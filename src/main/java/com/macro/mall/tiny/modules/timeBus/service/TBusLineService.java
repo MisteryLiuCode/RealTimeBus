@@ -1,6 +1,7 @@
 package com.macro.mall.tiny.modules.timeBus.service;
 
 import com.macro.mall.tiny.modules.timeBus.dto.BusByLineIdsParam;
+import com.macro.mall.tiny.modules.timeBus.dto.SearchParam;
 import com.macro.mall.tiny.modules.timeBus.model.TBusLine;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -15,7 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface TBusLineService extends IService<TBusLine> {
 
     String getBusData();
-    String getBusDataByLineName(String lineName);
+    String getBusDataByLineName(SearchParam searchParam);
 
     String getBusDataByLineIds(BusByLineIdsParam busByLineIdsParam);
 }

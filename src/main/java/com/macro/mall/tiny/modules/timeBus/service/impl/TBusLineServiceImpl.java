@@ -1,21 +1,26 @@
 package com.macro.mall.tiny.modules.timeBus.service.impl;
 
+import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.macro.mall.tiny.common.service.RedisService;
-import com.macro.mall.tiny.modules.timeBus.dto.BusByLineIdsParam;
-import com.macro.mall.tiny.modules.timeBus.dto.LineStationDTO;
-import com.macro.mall.tiny.modules.timeBus.dto.SearchResult;
+import com.macro.mall.tiny.modules.timeBus.dto.*;
 import com.macro.mall.tiny.modules.timeBus.model.TBusLine;
 import com.macro.mall.tiny.modules.timeBus.mapper.TBusLineMapper;
 import com.macro.mall.tiny.modules.timeBus.service.TBusLineService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -26,6 +31,7 @@ import java.util.List;
  * @since 2024-04-06
  */
 @Service
+@Slf4j
 public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> implements TBusLineService {
 
     @Value("${redis.database}")
@@ -60,17 +66,30 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
     }
 
     @Override
-    public String getBusDataByLineName(String lineName) {
-        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA + ":" + lineName;
+    public String getBusDataByLineName(SearchParam searchParam) {
+        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA + ":" + searchParam;
         // 从缓存中获取
         Object data = redisService.get(REDIS_KEY);
         if (data != null) {
             return data.toString();
         }
-        List<LineStationDTO> lineStationDTOList = lineMapper.selectLineStationByLineName(lineName);
-        String jsonData = JSON.toJSONString(lineStationDTOList);
-        // 查询结果放入redis
-        redisService.set(REDIS_KEY, jsonData);
+        // 从数据库里查询
+        List<LineStationDTO> lineStationDTOList;
+        lineStationDTOList = lineMapper.selectLineStationByLineName(searchParam.getSearch(), null);
+        if (lineStationDTOList.size() == 0) {
+            // 调用高德目的地搜索
+            String destinationLonLat = getStationByLineIds(searchParam.getSearch());
+            if (StringUtils.isNotBlank(destinationLonLat)) {
+                List<String> lineNameList = getLineByDestination(searchParam, destinationLonLat);
+                lineStationDTOList = lineMapper.selectLineStationByLineName(null, lineNameList);
+            }
+        }
+        String jsonData = "";
+        if (lineStationDTOList.size() != 0) {
+            jsonData = JSON.toJSONString(lineStationDTOList);
+            // 查询结果放入redis
+            redisService.set(REDIS_KEY, jsonData);
+        }
         return jsonData;
     }
 
@@ -79,5 +98,83 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
         Object data = redisService.get(REDIS_KEY);
         JSONObject.parseArray(data.toString(), List.class);
         return null;
+    }
+
+
+    public List<String> getLineByDestination(SearchParam searchParam, String destinationLonLat) {
+        // 我的位置经纬度
+        String myLocation = searchParam.getLongitude() + "," + searchParam.getLatitude();
+
+        String baseUrl = "https://restapi.amap.com/v5/direction/transit/integrated?";
+
+        String apiKey = "7cc79318587d2f506147dc351024ca2f";
+
+        String url = baseUrl + "origin=" + myLocation + "&destination=" + destinationLonLat + "&key=" + apiKey + "&city1=010&city2=010";
+
+        String resp = HttpUtil.createGet(url).execute().body();
+
+        LineDestination lineDestination = JSONObject.parseObject(resp, LineDestination.class);
+
+        /**
+         * - 结果集拿到root
+         * - 拿到transits
+         * - 拿到每一个segments
+         * - 拿到每一个bus
+         * - 筛选type为公交的busLine
+         */
+        List<String> busLineNameList = lineDestination.getRoute().getTransits().stream().flatMap(transits -> transits.getSegments().stream()).map(Segments::getBus).flatMap(bus -> {
+            if (bus != null && bus.getBuslines() != null) {
+                return bus.getBuslines().stream();
+            } else {
+                return Stream.empty();
+            }
+        }).filter(buslines -> buslines.getType().contains("公交")).map(busInfo -> {
+            busInfo.setName(removeParenthesesAndLastChar(busInfo.getName()));
+            return busInfo.getName();
+        }).collect(Collectors.toList());
+
+        log.info("获取的所有公交线路名称: {}", JSONObject.toJSONString(busLineNameList));
+        return busLineNameList;
+    }
+
+
+    /**
+     * 获取一个地方经纬度
+     */
+    public String getStationByLineIds(String placeName) {
+        String baseUrl = "https://restapi.amap.com/v3/geocode/geo?";
+        String apiKey = "7cc79318587d2f506147dc351024ca2f";
+        log.info("需要地理编码的位置", placeName);
+
+        try {
+            String url = baseUrl + "address=" + placeName + "&cityCode=010" + "&output=json&key=" + apiKey;
+            String resp = HttpUtil.createGet(url).execute().body();
+            StopLocation location = JSONObject.parseObject(resp, StopLocation.class);
+
+            if (!"1".equals(location.getStatus()) || "0".equals(location.getCount())) {
+                log.error("{}: 查询失败, 响应: {}", placeName, resp);
+                return "";
+            }
+
+            Optional<Geocodes> maybeGeocode = location.getGeocodes().stream().findFirst();
+
+            if (maybeGeocode.isPresent()) {
+                Geocodes geocodes = maybeGeocode.get();
+                log.debug("{}: 查询成功, 经纬度: {}", placeName, geocodes.getLocation());
+                return geocodes.getLocation();
+            } else {
+                log.error("{}: 无有效经纬度信息, 响应: {}", placeName, resp);
+            }
+        } catch (Exception e) {
+            log.error("处理过程中发生异常", e);
+        }
+        return "";
+    }
+
+    public static String removeParenthesesAndLastChar(String input) {
+        // 使用正则表达式去除括号及其内容
+        input = input.replaceAll("\\(.*?\\)", "");
+        // 去除最后一个字符
+        return input.substring(0, input.length() - 1);
     }
 }

@@ -5,9 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.macro.mall.tiny.common.api.CommonResult;
 import com.macro.mall.tiny.common.service.RedisService;
-import com.macro.mall.tiny.modules.timeBus.dto.Geocodes;
-import com.macro.mall.tiny.modules.timeBus.dto.LineStationDTO;
-import com.macro.mall.tiny.modules.timeBus.dto.StopLocation;
+import com.macro.mall.tiny.modules.timeBus.dto.*;
 import com.macro.mall.tiny.modules.timeBus.mapper.TBusLineMapper;
 import com.macro.mall.tiny.modules.timeBus.mapper.TBusStopMapper;
 import com.macro.mall.tiny.modules.timeBus.service.TBusLineService;
@@ -23,6 +21,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.client.methods.HttpGet;
@@ -63,7 +63,7 @@ public class MallTinyApplicationTests {
 
     @Test
     public void getCity() {
-        getCityUrl += "&location=" + "116.481488,39.990464"+"&key="+"0fb664b477f15256035f259fd406defc";
+        getCityUrl += "&location=" + "116.481488,39.990464" + "&key=" + "0fb664b477f15256035f259fd406defc";
         String result = HttpUtil.createGet(getCityUrl).contentType("application/json").execute().body();
         System.out.println(result);
     }
@@ -72,7 +72,7 @@ public class MallTinyApplicationTests {
      * 获取所有路线和车站
      */
     @Test
-    public void getLineStation(){
+    public void getLineStation() {
         //开始执行时间
         long start = System.currentTimeMillis();
         String busData = busLineService.getBusData();
@@ -86,10 +86,12 @@ public class MallTinyApplicationTests {
      * 获取一条线路
      */
     @Test
-    public void getLineStationByLineName(){
+    public void getLineStationByLineName() {
         //开始执行时间
         long start = System.currentTimeMillis();
-        String busData = busLineService.getBusDataByLineName("专201");
+        SearchParam searchParam = new SearchParam();
+        searchParam.setSearch("1");
+        String busData = busLineService.getBusDataByLineName(searchParam);
         // 结束执行时间
         long end = System.currentTimeMillis();
         log.info("查询数据结果为:{}", JSONObject.toJSONString(CommonResult.success(busData)));
@@ -97,7 +99,7 @@ public class MallTinyApplicationTests {
     }
 
     @Test
-    public void testRedis(){
+    public void testRedis() {
         redisService.set("testRedisKey", "1");
         Object o = redisService.get("testRedisKey");
         log.info("redis获取结果为:{}", o.toString());
@@ -113,9 +115,9 @@ public class MallTinyApplicationTests {
         List<String> stopNames = tBusStopMapper.selectDistinctStopName();
         log.info("开始填充经纬度，站点数量：{}", stopNames.size());
 
-        try  {
+        try {
             for (String stopName : stopNames) {
-                String url = baseUrl + "address=北京市" + stopName+"公交站" + "&output=json&key="+apiKey;
+                String url = baseUrl + "address=北京市" + stopName + "公交站" + "&output=json&key=" + apiKey;
                 String resp = HttpUtil.createGet(url).execute().body();
                 StopLocation location = JSONObject.parseObject(resp, StopLocation.class);
 
@@ -140,5 +142,66 @@ public class MallTinyApplicationTests {
         } catch (Exception e) {
             log.error("处理过程中发生异常", e);
         }
+    }
+
+    /**
+     * 根据目的地获取公交线路
+     * 请求示例
+     * https://restapi.amap.com/v5/direction/transit/integrated?
+     * origin=116.466485,39.995197&destination=116.46424,40.020642&key=<用户的key>&city1=010&city2=010
+     */
+    @Test
+    public void getLineByDestination() {
+
+        // 我的位置经纬度
+        String myLocation = "116.543672,40.035133";
+
+        // 终点经纬度
+        String destination = "116.487105,40.0032";
+
+
+        String baseUrl = "https://restapi.amap.com/v5/direction/transit/integrated?";
+
+        String apiKey = "7cc79318587d2f506147dc351024ca2f";
+
+        String url = baseUrl + "origin=" + myLocation + "&destination=" + destination + "&key=" + apiKey + "&city1=010&city2=010";
+
+        String resp = HttpUtil.createGet(url).execute().body();
+
+        LineDestination lineDestination = JSONObject.parseObject(resp, LineDestination.class);
+
+        /**
+         * - 结果集拿到root
+         * - 拿到transits
+         * - 拿到每一个segments
+         * - 拿到每一个bus
+         * - 筛选type为公交的busLine
+         */
+        List<String> busLineNameList = lineDestination.getRoute().getTransits().stream()
+                .flatMap(transits -> transits.getSegments().stream())
+                .map(Segments::getBus)
+                .flatMap(bus -> {
+                            if (bus != null && bus.getBuslines() != null) {
+                                return bus.getBuslines().stream();
+                            } else {
+                                return Stream.empty();
+                            }
+                        }
+                )
+                .filter(buslines -> buslines.getType().contains("公交"))
+                .map(busInfo ->{
+                    busInfo.setName(removeParenthesesAndLastChar(busInfo.getName()));
+                    return busInfo.getName();
+                })
+                .collect(Collectors.toList());
+
+        log.info("获取的所有公交线路名称: {}", JSONObject.toJSONString(busLineNameList));
+    }
+
+    public static String removeParenthesesAndLastChar(String input) {
+        // 使用正则表达式去除括号及其内容
+        input = input.replaceAll("\\(.*?\\)", "");
+        // 去除最后一个字符
+        return input.substring(0, input.length() - 1);
     }
 }
