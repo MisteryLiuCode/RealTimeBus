@@ -18,5 +18,5 @@ import java.util.List;
 public interface TBusLineMapper extends BaseMapper<TBusLine> {
 
     List<LineStationDTO> selectLineStation();
-    List<LineStationDTO> selectLineStationByLineName(@Param("lineName") String lineName, @Param("lineNameList") List<String> lineNameList);
+    List<LineStationDTO> selectLineStationByLineName(@Param("lineName") String lineName, @Param("lineDescList") List<String> lineDescList);
 }

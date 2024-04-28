@@ -7,9 +7,9 @@ import java.util.List;
 @Data
 public class SearchResult {
 
-    List<LineStationDTO> lineStationDTOList;
+    List<LineStationDTO> lineStationsList;
 
-    private String searchLineName;
+    private String searchText;
 
 
 }

@@ -14,10 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import springfox.documentation.spring.web.json.Json;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -74,23 +72,26 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
 //        if (data != null) {
 //            return data.toString();
 //        }
+        SearchResult searchResult = new SearchResult();
         // 从数据库里查询
         List<LineStationDTO> lineStationDTOList;
         lineStationDTOList = lineMapper.selectLineStationByLineName(searchParam.getSearchText(), null);
-        if (lineStationDTOList.size() == 0) {
-            log.info("开始按照目的地搜索");
-            // 调用高德目的地搜索
-            String destinationLonLat = getStationByLineIds(searchParam.getSearchText());
-            if (StringUtils.isNotBlank(destinationLonLat)) {
-                List<String> lineNameList = getLineByDestination(searchParam, destinationLonLat);
-                log.info("按照目的地搜索的线路名称：" + JSONObject.toJSONString(lineNameList));
-                lineStationDTOList = lineMapper.selectLineStationByLineName(null, lineNameList);
-                log.info("按照目的地搜索的线路结果：" + JSONObject.toJSONString(lineStationDTOList));
-            }
-        }
+//        if (lineStationDTOList.size() == 0) {
+//            log.info("开始按照目的地搜索");
+//            // 调用高德目的地搜索
+//            String destinationLonLat = getStationByLineIds(searchParam.getSearchText());
+//            if (StringUtils.isNotBlank(destinationLonLat)) {
+//                List<String> lineDescList = getLineByDestination(searchParam, destinationLonLat);
+//                log.info("按照目的地搜索的线路：" + JSONObject.toJSONString(lineDescList));
+//                lineStationDTOList = lineMapper.selectLineStationByLineName(null, lineDescList);
+//                log.info("按照目的地搜索的线路结果：" + JSONObject.toJSONString(lineStationDTOList));
+//            }
+//        }
         String jsonData = "";
         if (lineStationDTOList.size() != 0) {
-            jsonData = JSON.toJSONString(lineStationDTOList);
+            searchResult.setSearchText(searchParam.getSearchText());
+            searchResult.setLineStationsList(lineStationDTOList);
+            jsonData = JSON.toJSONString(searchResult);
             // 查询结果放入redis
             redisService.set(REDIS_KEY, jsonData);
         }
@@ -126,19 +127,19 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
          * - 拿到每一个bus
          * - 筛选type为公交的busLine
          */
-        List<String> busLineNameList = lineDestination.getRoute().getTransits().stream().flatMap(transits -> transits.getSegments().stream()).map(Segments::getBus).flatMap(bus -> {
+        List<String> busDescList = lineDestination.getRoute().getTransits().stream().flatMap(transits -> transits.getSegments().stream()).map(Segments::getBus).flatMap(bus -> {
             if (bus != null && bus.getBuslines() != null) {
                 return bus.getBuslines().stream();
             } else {
                 return Stream.empty();
             }
         }).filter(buslines -> buslines.getType().contains("公交")).map(busInfo -> {
-            busInfo.setName(removeParenthesesAndLastChar(busInfo.getName()));
+            busInfo.setName(processString(busInfo.getName()));
             return busInfo.getName();
         }).collect(Collectors.toList());
 
-        log.info("获取的所有公交线路名称: {}", JSONObject.toJSONString(busLineNameList));
-        return busLineNameList;
+        log.info("获取的所有公交线路名称: {}", JSONObject.toJSONString(busDescList));
+        return busDescList;
     }
 
 
@@ -176,10 +177,11 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
         return "";
     }
 
-    public static String removeParenthesesAndLastChar(String input) {
-        // 使用正则表达式去除括号及其内容
-        input = input.replaceAll("\\(.*?\\)", "");
-        // 去除最后一个字符
-        return input.substring(0, input.length() - 1);
+    public static String processString(String input) {
+        // 删除"路"，确保它位于一个括号"("之前
+        input = input.replaceAll("路(?=\\()", "");
+        // 将两个连续的"-"替换为一个"-"
+        input = input.replaceAll("--", "-");
+        return input;
     }
 }

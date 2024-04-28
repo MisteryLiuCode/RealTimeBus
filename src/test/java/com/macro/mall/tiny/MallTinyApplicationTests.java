@@ -18,7 +18,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -90,7 +92,7 @@ public class MallTinyApplicationTests {
         //开始执行时间
         long start = System.currentTimeMillis();
         SearchParam searchParam = new SearchParam();
-        searchParam.setSearch("1");
+        searchParam.setSearchText("1");
         String busData = busLineService.getBusDataByLineName(searchParam);
         // 结束执行时间
         long end = System.currentTimeMillis();
@@ -152,7 +154,6 @@ public class MallTinyApplicationTests {
      */
     @Test
     public void getLineByDestination() {
-
         // 我的位置经纬度
         String myLocation = "116.543672,40.035133";
 
@@ -190,7 +191,7 @@ public class MallTinyApplicationTests {
                 )
                 .filter(buslines -> buslines.getType().contains("公交"))
                 .map(busInfo ->{
-                    busInfo.setName(removeParenthesesAndLastChar(busInfo.getName()));
+                    busInfo.setName(processString(busInfo.getName()));
                     return busInfo.getName();
                 })
                 .collect(Collectors.toList());
@@ -198,10 +199,11 @@ public class MallTinyApplicationTests {
         log.info("获取的所有公交线路名称: {}", JSONObject.toJSONString(busLineNameList));
     }
 
-    public static String removeParenthesesAndLastChar(String input) {
-        // 使用正则表达式去除括号及其内容
-        input = input.replaceAll("\\(.*?\\)", "");
-        // 去除最后一个字符
-        return input.substring(0, input.length() - 1);
+    public static String processString(String input) {
+        // 删除"路"，确保它位于一个括号"("之前
+        input = input.replaceAll("路(?=\\()", "");
+        // 将两个连续的"-"替换为一个"-"
+        input = input.replaceAll("--", "-");
+        return input;
     }
 }

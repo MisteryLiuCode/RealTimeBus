@@ -57,7 +57,7 @@ public class TBusLineController {
         // 结束时间
         long endTime = System.currentTimeMillis();
         // 运行时间
-        log.info("运行时间：{}", endTime - startTime);
+        log.info("搜索运行时间：{}", endTime - startTime);
         return CommonResult.success(res);
     }
 

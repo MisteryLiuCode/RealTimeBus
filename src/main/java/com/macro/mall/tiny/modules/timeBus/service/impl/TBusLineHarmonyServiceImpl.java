@@ -6,11 +6,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.macro.mall.tiny.common.service.RedisService;
 import com.macro.mall.tiny.modules.timeBus.dto.BusByLineIdsParam;
 import com.macro.mall.tiny.modules.timeBus.dto.LineStationDTO;
-import com.macro.mall.tiny.modules.timeBus.dto.SearchResult;
+import com.macro.mall.tiny.modules.timeBus.dto.SearchHarmonyResult;
 import com.macro.mall.tiny.modules.timeBus.mapper.TBusLineMapper;
 import com.macro.mall.tiny.modules.timeBus.model.TBusLine;
 import com.macro.mall.tiny.modules.timeBus.service.TBusLineHarmonyService;
-import com.macro.mall.tiny.modules.timeBus.service.TBusLineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -62,7 +61,7 @@ public class TBusLineHarmonyServiceImpl extends ServiceImpl<TBusLineMapper, TBus
 
     @Override
     public String getBusDataByLineName(String lineName) {
-        SearchResult searchResult = new SearchResult();
+        SearchHarmonyResult searchHarmonyResult = new SearchHarmonyResult();
         String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_HARMONY_KEY_DATA + ":" + lineName;
         // 从缓存中获取
         Object data = redisService.get(REDIS_KEY);
@@ -70,9 +69,9 @@ public class TBusLineHarmonyServiceImpl extends ServiceImpl<TBusLineMapper, TBus
             return data.toString();
         }
         List<LineStationDTO> lineStationDTOList = lineMapper.selectLineStationByLineName(lineName,null);
-        searchResult.setLineStationDTOList(lineStationDTOList);
-        searchResult.setSearchLineName(lineName);
-        String jsonData = JSON.toJSONString(searchResult);
+        searchHarmonyResult.setLineStationDTOList(lineStationDTOList);
+        searchHarmonyResult.setSearchLineName(lineName);
+        String jsonData = JSON.toJSONString(searchHarmonyResult);
         // 查询结果放入redis
         redisService.set(REDIS_KEY, jsonData);
         return jsonData;
