@@ -15,7 +15,7 @@ import com.macro.mall.tiny.modules.timeBus.model.TBusLine;
 public interface TBusLineHarmonyService extends IService<TBusLine> {
 
     String getBusData();
-    String getBusDataByLineName(String lineName);
+    String getBusDataByLineName(String searchText);
 
     String getBusDataByLineIds(BusByLineIdsParam busByLineIdsParam);
 }

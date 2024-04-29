@@ -9,7 +9,7 @@ public class SearchHarmonyResult {
 
     List<LineStationDTO> lineStationDTOList;
 
-    private String searchLineName;
+    private String searchText;
 
 
 }

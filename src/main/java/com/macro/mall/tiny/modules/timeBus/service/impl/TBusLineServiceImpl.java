@@ -3,6 +3,7 @@ package com.macro.mall.tiny.modules.timeBus.service.impl;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.macro.mall.tiny.common.service.RedisService;
 import com.macro.mall.tiny.modules.timeBus.dto.*;
@@ -66,7 +67,7 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
 
     @Override
     public String getBusDataByLineName(SearchParam searchParam) {
-//        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA + ":" + searchParam;
+//        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA + ":" + searchParam.getSearchText();
 //        // 从缓存中获取
 //        Object data = redisService.get(REDIS_KEY);
 //        if (data != null) {
@@ -75,7 +76,7 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
         SearchResult searchResult = new SearchResult();
         // 从数据库里查询
         List<LineStationDTO> lineStationDTOList;
-        lineStationDTOList = lineMapper.selectLineStationByLineName(searchParam.getSearchText(), null);
+        lineStationDTOList = lineMapper.selectLineStationByLineName(searchParam.getSearchText());
 //        if (lineStationDTOList.size() == 0) {
 //            log.info("开始按照目的地搜索");
 //            // 调用高德目的地搜索

@@ -67,19 +67,11 @@
             s.latitude,
             s.longitude
         from t_bus_line l JOIN t_bus_stop s ON l.id = s.line_id
-        where 1=1
-        <if test="lineName != null and lineName != ''">
-            AND l.line_name like
-                concat('%',#{lineName},'%')
-            OR s.stop_name like
-                concat('%',#{lineName},'%')
-        </if>
-        <if test="lineDescList != null and lineDescList.size() > 0">
-            AND l.description IN
-            <foreach item="description" collection="lineDescList" open="(" separator="," close=")">
-                #{description}
-            </foreach>
-        </if>
+        where
+         (l.line_name like
+            concat('%',#{searchText},'%'))
+        OR (s.stop_name like
+            concat('%',#{searchText},'%'))
         order by s.stop_number
     </select>
 

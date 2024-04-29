@@ -60,17 +60,17 @@ public class TBusLineHarmonyServiceImpl extends ServiceImpl<TBusLineMapper, TBus
     }
 
     @Override
-    public String getBusDataByLineName(String lineName) {
+    public String getBusDataByLineName(String searchText) {
         SearchHarmonyResult searchHarmonyResult = new SearchHarmonyResult();
-        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_HARMONY_KEY_DATA + ":" + lineName;
+        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_HARMONY_KEY_DATA + ":" + searchText;
         // 从缓存中获取
         Object data = redisService.get(REDIS_KEY);
         if (data != null) {
             return data.toString();
         }
-        List<LineStationDTO> lineStationDTOList = lineMapper.selectLineStationByLineName(lineName,null);
+        List<LineStationDTO> lineStationDTOList = lineMapper.selectLineStationByLineName(searchText);
         searchHarmonyResult.setLineStationDTOList(lineStationDTOList);
-        searchHarmonyResult.setSearchLineName(lineName);
+        searchHarmonyResult.setSearchText(searchText);
         String jsonData = JSON.toJSONString(searchHarmonyResult);
         // 查询结果放入redis
         redisService.set(REDIS_KEY, jsonData);

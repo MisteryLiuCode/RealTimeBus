@@ -48,12 +48,12 @@ public class TBusLineHarmonyController {
 
     // 拿到搜索的线路
     @ApiOperation(value = "以线路名称搜索列表")
-    @RequestMapping(value = "/getBusDataByLineName/{lineName}",method = RequestMethod.GET)
+    @RequestMapping(value = "/getBusDataByLineName/{searchText}",method = RequestMethod.GET)
     @ApiIgnore
-    public CommonResult<String> getBusDataByLineName(@PathVariable String lineName) {
+    public CommonResult<String> getBusDataByLineName(@PathVariable String searchText) {
         // 开始时间
         long startTime = System.currentTimeMillis();
-        String res = busLineHarmonyService.getBusDataByLineName(lineName);
+        String res = busLineHarmonyService.getBusDataByLineName(searchText);
         // 结束时间
         long endTime = System.currentTimeMillis();
         // 运行时间
