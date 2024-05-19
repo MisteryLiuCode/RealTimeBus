@@ -67,12 +67,12 @@ public class TBusLineServiceImpl extends ServiceImpl<TBusLineMapper, TBusLine> i
 
     @Override
     public String getBusDataByLineName(SearchParam searchParam) {
-//        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA + ":" + searchParam.getSearchText();
-//        // 从缓存中获取
-//        Object data = redisService.get(REDIS_KEY);
-//        if (data != null) {
-//            return data.toString();
-//        }
+        String REDIS_KEY = REDIS_DATABASE + ":" + REDIS_KEY_DATA + ":" + searchParam.getSearchText();
+        // 从缓存中获取
+        Object data = redisService.get(REDIS_KEY);
+        if (data != null) {
+            return data.toString();
+        }
         SearchResult searchResult = new SearchResult();
         // 从数据库里查询
         List<LineStationDTO> lineStationDTOList;
