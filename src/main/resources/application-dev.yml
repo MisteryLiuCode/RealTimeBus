@@ -4,7 +4,7 @@ spring:
     username: real_time_bus
     password: l198923.
   redis:
-    host: 47.99.71.232 # Redis服务器地址
+    host: 101.43.145.108 # Redis服务器地址
     database: 1 # Redis数据库索引（默认为0）
     port: 6379 # Redis服务器连接端口
     password: l198923. # Redis服务器连接密码（默认为空）
