@@ -61,4 +61,4 @@ secure:
       - /timeBus/tBusLineHarmony/getBusDataByLineName/**
 
 bjbus:
-  token: eyJhbGciOiJIUzI1NiIsIlR5cGUiOiJKd3QiLCJ0eXAiOiJKV1QifQ.eyJwYXNzd29yZCI6IjY0ODU5MTQzNSIsInVzZXJOYW1lIjoiYmpidXMiLCJleHAiOjE3MTg2ODMxOTl9.qXL1gHkEgEijd6iCwf92psBMS9CIWT9fI52V2i-8erg
+  token: eyJhbGciOiJIUzI1NiIsIlR5cGUiOiJKd3QiLCJ0eXAiOiJKV1QifQ.eyJwYXNzd29yZCI6IjY0ODU5MTQzNSIsInVzZXJOYW1lIjoiYmpidXMiLCJleHAiOjE3MjM5MzE5OTl9.7clG3-YNY_ENjABL_q_xeiFj6IIxiQUrdVpCsV04nf0
